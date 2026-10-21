@@ -320,5 +320,19 @@ cp[0] = 'R'; // 가능: 수정 가능한 배열의 원소 변경
 | `char *const cp` | 저장된 주소 변경 금지 |
 | `const char *const cp` | 둘 다 금지 |
 
+```c
+// str을 변경하지않겠다 안심해라 
+// 목적이 드러나죠잉
+int mystrlen(const char* str)
+{
+    const char* s;
+
+    if (str == 0)
+        return 0;
+    for (s = str; *s; ++s);
+    return s - str;
+}
+
+```
 
 각 코드 블록은 서로 독립적인 예시이다. 출력 코드를 실행하려면 함수 내부에 작성한다.

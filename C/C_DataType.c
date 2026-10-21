@@ -13,22 +13,22 @@
 // }
 // #endif
 
-#if 2
-int mystrlen(const char *str)
-{
-  const char *s;
+// #if 2
+// int mystrlen(const char *str)
+// {
+//   const char *s;
 
-  if (str == 0)
-    return 0;
-  for (s = str; *s; ++s);
-  return s-str;
-}
+//   if (str == 0)
+//     return 0;
+//   for (s = str; *s; ++s);
+//   return s-str;
+// }
 
 
-int main(void){
-    int a = mystrlen("apple");
-    printf("a=%d\n", a);
+// int main(void){
+//     int a = mystrlen("apple");
+//     printf("a=%d\n", a);
     
-    return 0;
-}
-#endif 2
+//     return 0;
+// }
+// #endif 2
