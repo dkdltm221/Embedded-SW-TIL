@@ -32,3 +32,29 @@
 //     return 0;
 // }
 // #endif 2
+
+// #if 1
+// int main(void){
+//     int a =10,b=20;
+//     int res;
+//     res = (a>b) ? a : b;
+//     if(a>b){
+//         res =a;
+//     }
+//     else{
+//         res = b;
+//     }
+//     printf("res=%d\n", res);
+//     return 0;
+// }
+
+unsigned int setBit(unsigned int num, int bitPosition) {
+    return num | (1U << bitPosition);
+}
+
+int main(void) {
+    unsigned int num = 0xAU; // 2진수 1010
+
+    printf("num=%X\n", setBit(num, 2)); // 1110 → 16진수 E
+    return 0;
+}
