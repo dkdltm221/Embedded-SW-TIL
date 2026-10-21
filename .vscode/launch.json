@@ -1,0 +1,21 @@
+﻿{
+    "version":  "0.2.0",
+    "configurations":  [
+                           {
+                               "args":  [
+
+                                        ],
+                               "type":  "cppvsdbg",
+                               "cwd":  "${fileDirname}",
+                               "console":  "integratedTerminal",
+                               "environment":  [
+
+                                               ],
+                               "name":  "C/C++: Build and debug active file",
+                               "stopAtEntry":  false,
+                               "preLaunchTask":  "C/C++: cl.exe build active file",
+                               "program":  "${workspaceFolder}\\build\\${relativeFileDirname}\\${fileBasenameNoExtension}\\${fileBasenameNoExtension}.exe",
+                               "request":  "launch"
+                           }
+                       ]
+}
