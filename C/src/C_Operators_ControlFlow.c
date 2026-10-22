@@ -66,7 +66,7 @@ int main(void){
 
 #endif
 
-#if 1
+#if 0
 
 static unsigned int isBitSet(unsigned int num,int bitPosition){
     return (num>>bitPosition) & 1U;
@@ -76,7 +76,26 @@ int main(void){
     unsigned int res = isBitSet(10U,1);
 
     printf("Bit %d of number %u is %u.\n",1,10U,res);
-    
+
     return 0;
 }
+#endif
+
+#if 0
+int main(void){
+    int a;
+    scanf_s("%d",&a);
+
+    int a1 = a/1000;
+    int a2 = a/100 % 10;
+    int a3 = a/10 %10;
+    int a4 = a %10;
+
+    printf("%d %d %d %d",a1,a2,a3,a4);
+}
+
+#endif
+
+#if 1
+
 #endif
