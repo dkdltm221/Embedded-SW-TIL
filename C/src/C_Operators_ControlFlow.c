@@ -204,7 +204,7 @@ int main(void){
 
 #endif
 
-#if 1
+#if 0
 
 int main(void){
     int a1,a2;
@@ -217,4 +217,53 @@ int main(void){
     printf("%d %d",a1,a2);
 }
 
+#endif
+
+#if 1
+int sumPositiveNumbers(){
+    int sum=0,n;
+
+    do{
+        scanf_s("%d",&n);
+
+        if(n>0)
+            sum+=n;
+    }while(n!=0);
+
+    return sum;
+}
+
+void verifyPassword(){
+    int num=0,pw;
+
+    do{
+        scanf_s("%d",&pw);
+        if(pw==1357){
+            printf("로그인 성공!\n");
+            return;
+        }
+        num++;
+    }while(num<3);
+
+    printf("관리자에게 문의하세요\n");
+}
+
+int countDigits(){
+    int num=0,inputN;
+
+    scanf_s("%d",&inputN);
+
+    while(inputN>0){
+        inputN/=10;
+        num++;
+    }
+    
+    return num;
+}
+
+int main(void){
+    printf("%d\n",sumPositiveNumbers());
+    verifyPassword();
+    printf("%d\n",countDigits());
+}
 #endif

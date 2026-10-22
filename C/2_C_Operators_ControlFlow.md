@@ -544,4 +544,77 @@ int main(void) {
 **코드가 짧거나 조건식에 연산이 적다고 반드시 더 빠른 것은 아니다.** 여기서는 입력 처리 비용이 크므로 속도 차이를 단정하기보다 입력 성공 여부와 반복 종료 조건을 명확히 작성한다.
 
 ### 반복문 활용
+
 ![참고사진](./img/02-4h.png)
+
+입력 반복, 횟수 제한, 자릿수 계산에 반복문을 활용한다.
+
+| 함수 | 동작 | 종료 조건 |
+| --- | --- | --- |
+| `sumPositiveNumbers()` | 양수만 누적하고 음수는 무시 | 0 입력 |
+| `verifyPassword()` | 암호 1357 확인, 최대 3회 시도 | 암호 일치 또는 3회 실패 |
+| `countDigits()` | 양수를 10으로 나누며 자릿수 계산 | 나눈 값이 0이 됨 |
+
+#### 실습 코드
+
+아래 코드는 정상적인 정수 입력과 `int` 범위 안의 합계를 전제로 한다. 자릿수 계산은 양수를 대상으로 한다.
+
+```c
+#include <stdio.h>
+
+int sumPositiveNumbers(){
+    int sum=0,n;
+
+    do{
+        scanf_s("%d",&n);
+
+        if(n>0)
+            sum+=n;
+    }while(n!=0);
+
+    return sum;
+}
+
+void verifyPassword(){
+    int num=0,pw;
+
+    do{
+        scanf_s("%d",&pw);
+        if(pw==1357){
+            printf("로그인 성공!\n");
+            return;
+        }
+        num++;
+    }while(num<3);
+
+    printf("관리자에게 문의하세요\n");
+}
+
+int countDigits(){
+    int num=0,inputN;
+
+    scanf_s("%d",&inputN);
+
+    while(inputN>0){
+        inputN/=10;
+        num++;
+    }
+    return num;
+}
+
+int main(void){
+    printf("%d\n",sumPositiveNumbers());
+    verifyPassword();
+    printf("%d\n",countDigits());
+}
+```
+
+#### 핵심 흐름
+
+- **양수 합계:** `sum`을 0으로 초기화하고 `n > 0`일 때만 더한다. `do-while`로 입력을 최소 한 번 받고, 0을 입력하면 종료한다.
+- **암호 확인:** 실패할 때만 `num`을 증가시킨다. `num < 3`인 동안 재시도하고, 성공하면 `return`으로 함수를 즉시 끝내 관리자 안내가 출력되지 않게 한다.
+- **자릿수 계산:** 정수에서 `/= 10`은 일의 자리를 하나씩 없앤다. `123 → 12 → 1 → 0`이면 3번 반복하므로 3자리이다.
+
+`main()`은 **합계 입력 → 암호 확인 → 자릿수 입력** 순서로 실행한다. 처음에는 안내 문구 없이 입력을 기다리므로 터미널에 숫자를 입력하고 Enter를 누른다. 합계 입력은 반드시 **0을 입력해야 다음 단계로 진행**한다.
+
+현재 `countDigits()`는 0이나 음수를 입력하면 반복하지 않아 0을 반환한다. 0도 한 자리로 세려면 별도 처리하거나 `do-while`로 변경한다. 실제 사용 시에는 각 `scanf_s`의 반환값이 1인지 확인해 입력 실패도 처리한다.
