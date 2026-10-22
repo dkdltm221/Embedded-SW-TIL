@@ -602,10 +602,23 @@ int countDigits(){
     return num;
 }
 
+int reverseInt(){
+    int num,reverse=0;
+
+    scanf_s("%d",&num);
+
+    while(num>0){
+        reverse = reverse*10 + num%10;
+        num/=10;
+    }
+    return reverse;
+}
+
 int main(void){
     printf("%d\n",sumPositiveNumbers());
     verifyPassword();
     printf("%d\n",countDigits());
+    printf("%d",reverseInt());
 }
 ```
 
