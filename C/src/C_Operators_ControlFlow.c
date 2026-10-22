@@ -175,7 +175,7 @@ int main(void){
 
 #endif
 
-#if 1
+#if 0
 
 int main(void){
     int score;
@@ -200,6 +200,21 @@ int main(void){
             break;
     }
     printf("%s",c);
+}
+
+#endif
+
+#if 1
+
+int main(void){
+    int a1,a2;
+
+    while(scanf_s("%d",&a1) && (a1 > 10));
+
+    do{
+        scanf_s("%d",&a2);
+    }while(a2>10);
+    printf("%d %d",a1,a2);
 }
 
 #endif
