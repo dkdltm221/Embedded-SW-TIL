@@ -50,6 +50,8 @@
 
 unsigned int setBit(unsigned int num, int bitPosition) {
     return num | (1U << bitPosition);
+}unsigned int setBit(unsigned int num, int bitPosition) {
+    return num | (1U << bitPosition);
 }
 
 int main(void) {

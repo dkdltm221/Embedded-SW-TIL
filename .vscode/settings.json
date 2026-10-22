@@ -1,4 +1,11 @@
 {
     "files.autoSave": "afterDelay",
-    "files.autoSaveDelay": 1000
+    "files.autoSaveDelay": 1000,
+    "editor.quickSuggestions": {
+        "other": "off",
+        "comments": "off",
+        "strings": "off"
+    },
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.inlineSuggest.enabled": false
 }
