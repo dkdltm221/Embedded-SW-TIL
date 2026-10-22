@@ -182,6 +182,7 @@ int main(void){
     scanf_s("%d",&score);
     char* c;
     switch (score/10){
+        case 10:
         case 9:
             c="A";
             break;
