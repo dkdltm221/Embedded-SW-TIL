@@ -96,6 +96,109 @@ int main(void){
 
 #endif
 
+#if 0
+
+int check(int n){
+    if(n % 2 == 0) return 2;
+    if(n % 3 == 0) return 3;
+    if(n % 5 == 0) return 5;
+    return 0;
+}
+
+int main(void){
+    int n;
+    scanf_s("%d",&n);
+    //홀짝 조건문
+    if(n%2==0){
+        printf("even.\n");
+    }else{
+        printf("odd.\n");
+    }
+    //홀짝 비트연산
+
+    if (n & 1U) {
+        printf("odd.\n");
+    } else {
+        printf("even.\n");
+    }
+    //삼중 머시기
+    printf(n & 1U ? "odd" : "even");
+
+    //2,3,5 배수 검사
+    printf(check(n));
+
+
+}
+
+#endif
+
+#if 0
+
+int check(int n){
+    if(n % 2 == 0) return 2;
+    if(n % 3 == 0) return 3;
+    if(n % 5 == 0) return 5;
+
+    return 0;
+}
+
+int main(void){
+    int n;
+    scanf_s("%d",&n);
+    
+    printf("result: %d",check(n));
+}
+
+
+#endif
+
+#if 0
+
+int check(int s){
+    if(s>=70) return 0;
+    if(s>=60) return 1;
+    return 2;
+}
+
+int main(void){
+    char* result[] = {"합격입니다.","재시험보세요","불합격입니다."};
+    int score;
+
+    printf("점수(0~100)입력해주세요:");
+    scanf_s("%d",&score);
+
+    printf("%s \n감사합니다.",result[check(score)]);
+
+
+    return 0;
+}
+
+#endif
+
 #if 1
+
+int main(void){
+    int score;
+    scanf_s("%d",&score);
+    char* c;
+    switch (score/10){
+        case 9:
+            c="A";
+            break;
+        case 8:
+            c="B";
+            break;
+        case 7:
+            c="C";
+            break;
+        case 6:
+            c="D";
+            break;
+        default:
+            c="F";
+            break;
+    }
+    printf("%s",c);
+}
 
 #endif
