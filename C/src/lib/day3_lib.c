@@ -36,5 +36,34 @@ void swap(int *pa,int *pb){
     *pb = temp;
     
 }
+//큰값찾기
+int findmax_ary(int* arr,int n){
+    int max =0;
+    for(int i=0;i<n;i++){
+        if(*(arr+i)>max)
+            max=*(arr+i);
+    }
+    return max;
+}
+//작은값 찾기
+int findmin_ary(int* arr,int n){
+    int min = *arr;
+    for(int i=0;i<n;i++){
+        if(*(arr+i)<min)
+            min = *(arr+i);
+    }
+    return min;
+
+}
+//작은순 정렬
+void sort_data(int*arr , int n){
+    for(int i=0;i<n;i++){
+        for(int j=i;j<n;j++){
+            if(*(arr+i)>*(arr+j)){
+                swap(arr+i,arr+j);
+            }
+        }
+    }
+}
 
 #endif

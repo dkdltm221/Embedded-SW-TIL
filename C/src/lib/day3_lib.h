@@ -8,6 +8,9 @@ void print_data(int* arr, int n);
 double avg_data(int* arr,int n);
 int sum_data(int* arr,int n);
 void swap(int *pa,int *pb);
+int findmax_ary(int* arr,int n);
+int findmin_ary(int* arr,int n);
+void sort_data(int*arr , int n);
 #endif
 
 

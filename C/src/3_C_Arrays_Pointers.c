@@ -1,6 +1,6 @@
 
 #include "day3_lib.h"
-
+#define SIZE(x) (sizeof(x) / sizeof((x)[0]))
 #if 0
 #define SIZE(x) (sizeof(x) / sizeof((x)[0]))
 //x가 연산식으로 들어올수도있기에 x를 감싸준다.
@@ -63,18 +63,31 @@ int main(void){
 
 #endif
 
-#if 1
+#if 0
 
-void swap(int *pa,int *pb){
-    int temp = *pa; 
-    *pa = *pb;
-    *pb = temp;
-    
-}
+
 
 int main(void){
     int a=10,b=12;
     swap(&a,&b);
     printf("a=%d, b=%d\n",a,b);
 }
+#endif
+
+#if 1
+
+int main(void){
+    int score[5] = {0};
+    input_data(score,SIZE(score));
+    print_data(score,SIZE(score));
+    printf("total = %d\n",sum_data(score,SIZE(score)));
+    printf("average = %.2f\n",avg_data(score,SIZE(score)));
+    printf("min = %d\n", findmin_ary(score,SIZE(score)));
+    printf("max = %d\n",findmax_ary(score,SIZE(score)));
+    sort_data(score,SIZE(score));
+    print_data(score,SIZE(score));
+    return 0;
+
+}
+
 #endif
