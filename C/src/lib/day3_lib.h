@@ -7,6 +7,7 @@ void input_data(int* arr, int n);
 void print_data(int* arr, int n);
 double avg_data(int* arr,int n);
 int sum_data(int* arr,int n);
+void swap(int *pa,int *pb);
 #endif
 
 

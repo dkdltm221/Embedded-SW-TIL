@@ -29,4 +29,12 @@ int sum_data(int* arr,int n){
 double avg_data(int* arr,int n){
     return (double)sum_data(arr,n)/n;
 }
+
+void swap(int *pa,int *pb){
+    int temp = *pa; 
+    *pa = *pb;
+    *pb = temp;
+    
+}
+
 #endif

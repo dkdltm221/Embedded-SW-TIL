@@ -42,7 +42,7 @@ int main(void){
 }
 #endif
 
-#if 1
+#if 0
 
 int main(void){
     char str[80] = "apple";
@@ -57,8 +57,24 @@ int main(void){
     
     printf("%c\n","banana"[3]);
     
-    
+    p2[0] = 'k'; // RUN TIME ERROR - read only 메모리에 쓰기 동작을 해서 오류
     return 0;
 }
 
+#endif
+
+#if 1
+
+void swap(int *pa,int *pb){
+    int temp = *pa; 
+    *pa = *pb;
+    *pb = temp;
+    
+}
+
+int main(void){
+    int a=10,b=12;
+    swap(&a,&b);
+    printf("a=%d, b=%d\n",a,b);
+}
 #endif
