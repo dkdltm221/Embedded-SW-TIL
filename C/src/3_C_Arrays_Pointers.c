@@ -18,7 +18,7 @@ int main(void){
 
 #endif
 
-#if 1
+#if 0
 int main(void){
     char str1[80] = "cat";
     char str2[80];
@@ -40,4 +40,25 @@ int main(void){
     printf("-%c-",ch); 
     return 0;
 }
+#endif
+
+#if 1
+
+int main(void){
+    char str[80] = "apple";
+    char* p1 = str;
+    char* p2 = "banana";
+
+    // 포인터 상수 : str,apple,banana -> 보이는 것은 배열 이름, 문자열 이지만 해석시 '주소'로 할것
+    // 포인터 변수 : p1,p2
+    // p1 - 참조연산을 사옹해 char 읽고 쓰기 가능 
+    // p2 - 참조연산을 사용해 char 읽기만 가능 (쓰기 동작을 하면 오류 발생)
+    printf("%s\n","apple"+2); //이런것도 가능
+    
+    printf("%c\n","banana"[3]);
+    
+    
+    return 0;
+}
+
 #endif
