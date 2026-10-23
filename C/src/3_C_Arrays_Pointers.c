@@ -86,6 +86,30 @@ int main(void){
     printf("max = %d\n",findmax_ary(score,SIZE(score)));
     sort_data(score,SIZE(score));
     print_data(score,SIZE(score));
+
+    //array of unction pointer
+    int (*farr[3])(int*,int) = {sum_data, findmin_ary, findmax_ary};
+    char *fname[] = {"total","min","max"};
+    for(int i=0;i <SIZE(farr);++i){
+        printf("%s = %d\n",fname[i],farr[i](score,SIZE(score)));
+        
+    }
+
+    struct myfunc_t {
+        int (*fp)(int *,int);
+        char* fname;
+    };
+    struct myfunc_t myfarr[] = {
+        {sum_data,"total"},
+        {findmin_ary,"min"},
+        {findmax_ary,"max"}
+    };
+
+    for(int i=0;i <SIZE(farr);++i){
+        printf("%s = %d\n",myfarr[i].fname,myfarr[i].fp(score,SIZE(score)));
+        
+    }
+
     return 0;
 
 }

@@ -423,11 +423,72 @@ int result = fp();     // 함수 B 호출 → int 값을 받음
 char *(*(*var)())[10];
 ```
 
-## 07-1 배열과 포인터 
-![참고사진](./img/07-5.png)
-```
-배열을 가리킨다해서 배열의 크기를 갖는건 아니다. 
+## 07-1 배열과 포인터
 
-배열명은 변경할 수 없으나 배열 등가 포인터는 변경이 가능하다는 점에 유의하자.
+### 1. 배열과 포인터의 크기·변경 여부
+
+![참고사진](./img/07-5.png)
+
+```c
+int ary[3] = {10, 20, 30};
+int *p = ary;
+
+p++;       // 가능: p가 다음 원소를 가리키도록 변경
+// ary++;  // 불가능: 배열 이름 자체는 변경할 수 없음
 ```
+
+**배열을 가리키는 포인터가 배열 전체의 크기를 갖는 것은 아니다.**
+
+| 표현 | 의미 |
+| --- | --- |
+| `sizeof(ary)` | 배열 전체 크기: `3 * sizeof(int)` |
+| `sizeof(p)` | 포인터 변수 자체의 크기 |
+| `ary + 1` | 원소 하나만큼 이동한 주소: `&ary[1]` |
+| `&ary + 1` | 배열 전체 크기만큼 이동한 주소 |
+
+배열 이름에는 다른 주소를 대입할 수 없지만, 포인터 변수에는 다른 주소를 저장할 수 있다.
+
 ![참고사진](./img/07-7.png)
+
+### 2. 함수 포인터 배열로 여러 함수 호출하기
+
+같은 반환형과 매개변수형을 가진 함수들을 배열에 모으면, 반복문으로 선택해 호출할 수 있다. 아래 코드는 기존 `score`, `SIZE` 매크로와 함수 선언이 있는 상태에서 사용한다.
+
+```c
+int (*farr[3])(int *, int) = {sum_data, findmin_ary, findmax_ary};
+const char *fname[] = {"total", "min", "max"};
+
+for (int i = 0; i < SIZE(farr); ++i) {
+    printf("%s = %d\n", fname[i], farr[i](score, SIZE(score)));
+}
+```
+
+- `farr[i]`: i번째 함수의 포인터
+- `farr[i](score, SIZE(score))`: 해당 함수를 호출
+- `fname[i]`: 해당 함수의 출력 이름
+
+이 방식은 함수를 추가·삭제할 때 **함수 배열과 이름 배열을 함께 수정**해야 한다.
+
+### 3. 구조체로 함수와 이름 묶기
+
+함수 포인터와 이름을 하나의 구조체로 묶으면, 항목 한 곳만 추가·삭제하면 된다.
+
+```c
+struct myfunc_t {
+    int (*fp)(int *, int);
+    const char *fname;
+};
+
+struct myfunc_t myfarr[] = {
+    {sum_data, "total"},
+    {findmin_ary, "min"},
+    {findmax_ary, "max"}
+};
+
+for (int i = 0; i < SIZE(myfarr); ++i) {
+    printf("%s = %d\n", myfarr[i].fname,
+           myfarr[i].fp(score, SIZE(score)));
+}
+```
+
+`myfarr[i].fname`은 이름, `myfarr[i].fp`는 함수 포인터이다. 반복 범위도 **현재 사용하는 배열의 원소 개수인 `SIZE(myfarr)`**를 기준으로 한다.
