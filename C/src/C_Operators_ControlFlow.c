@@ -219,7 +219,7 @@ int main(void){
 
 #endif
 
-#if 1
+#if 0
 int sumPositiveNumbers(){
     int sum=0,n;
 
@@ -260,6 +260,8 @@ int countDigits(){
 
     return num;
 }
+
+//숫자 뒤집기
 int reverseInt(){
     int num,reverse=0;
 
@@ -272,10 +274,13 @@ int reverseInt(){
     return reverse;
 }
 
+
 int main(void){
     printf("%d\n",sumPositiveNumbers());
     verifyPassword();
     printf("%d\n",countDigits());
     printf("%d",reverseInt());
+
 }
 #endif
+
