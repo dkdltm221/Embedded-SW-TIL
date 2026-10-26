@@ -10,3 +10,13 @@ int main(void){
 }
 
 #endif
+
+#if 1
+
+int main(void){
+    char str[40] = "Tom & Jerry!!";
+    printf("%s\n",toupper(str));
+    return 0;
+}
+
+#endif
