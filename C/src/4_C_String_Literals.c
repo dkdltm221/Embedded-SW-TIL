@@ -24,7 +24,12 @@ int main(void){
 #if 1
 
 int main(void){
-    
+    //함수
+    printf("num : %d\n", GetNum());
+    Increment();
+    printf("num : %d\n",GetNum());
+    Increment();
+    printf("num :  %d\n",GetNum());
 
     return 0;
 }

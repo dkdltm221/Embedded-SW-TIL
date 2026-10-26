@@ -54,6 +54,14 @@ char * my_strcpy(char *to,const char* from){
     for(;(*to = *from); ++from,++to);
     return save;
 }
+extern int num;
+void Increment(){
+    num++;
+
+}
+int GetNum(){
+    return num;
+}
 
 
 #endif

@@ -492,3 +492,20 @@ for (int i = 0; i < SIZE(myfarr); ++i) {
 ```
 
 `myfarr[i].fname`은 이름, `myfarr[i].fp`는 함수 포인터이다. 반복 범위도 **현재 사용하는 배열의 원소 개수인 `SIZE(myfarr)`**를 기준으로 한다.
+
+
+```c
+extern int num;
+void Increment(){
+    num++;
+
+}
+int GetNum(){
+    return num;
+}
+
+이때 extern int num에 값을 넣지않도록 주의하자
+물론 초기값이 없을때는 넣어도 문제가되지않지만
+추후에 초기값을 세팅할때 문제가 생길수있다
+그러므로 해당 전역변수를 세팅한 파일에서 초기값을 주도록하자. 그러면 다른 파일에서의 실수를 방지할 수 있다.
+```
