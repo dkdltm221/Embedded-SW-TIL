@@ -37,7 +37,7 @@ void my_gets2(char * str, int n) {
 
 #if 1
 
-char* toupper(char* str){
+char* to_upper(char* str){
     char* start = str;
     while(*str!='\0'){
         if(*str >='a' && *str<='z'){

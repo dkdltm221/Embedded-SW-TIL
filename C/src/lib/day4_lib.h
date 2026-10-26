@@ -8,5 +8,5 @@
 #define SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
 void my_gets(char*str,int n);
-char* toupper(char* str);
+char* to_upper(char* str);
 #endif

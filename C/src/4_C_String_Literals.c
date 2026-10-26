@@ -15,7 +15,7 @@ int main(void){
 
 int main(void){
     char str[40] = "Tom & Jerry!!";
-    printf("%s\n",toupper(str));
+    printf("%s\n",to_upper(str));
     return 0;
 }
 
