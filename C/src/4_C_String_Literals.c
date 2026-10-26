@@ -1,6 +1,6 @@
 #include "day4_lib.h"
 
-#if 1
+#if 0
 
 int main(void){
     char str[30] = {0};
