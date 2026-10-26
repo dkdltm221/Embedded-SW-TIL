@@ -219,7 +219,7 @@ int main(void){
 
 #endif
 
-#if 0
+#if 1
 int sumPositiveNumbers(){
     int sum=0,n;
 

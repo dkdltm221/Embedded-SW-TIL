@@ -47,10 +47,11 @@
 //     printf("res=%d\n", res);
 //     return 0;
 // }
-
+#if 0
 unsigned int setBit(unsigned int num, int bitPosition) {
     return num | (1U << bitPosition);
-}unsigned int setBit(unsigned int num, int bitPosition) {
+}
+unsigned int setBit(unsigned int num, int bitPosition) {
     return num | (1U << bitPosition);
 }
 
@@ -60,3 +61,4 @@ int main(void) {
     printf("num=%X\n", setBit(num, 2)); // 1110 → 16진수 E
     return 0;
 }
+#endif

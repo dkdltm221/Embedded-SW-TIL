@@ -111,7 +111,24 @@ int main(void){
     }
 
     return 0;
+    /*
+    #include <stdio.h>
 
+int main(void){
+    int arr[10] = {0};
+    int num;
+    do{
+        scanf("%d",&num);
+        if(num==0) break;
+        arr[num%10]++;
+
+    }while(1);
+    for(int i=0;i<10;i++){
+        if(arr[i]!=0) printf("%d : %d개\n",i,arr[i]);
+    }
+    return 0;
+}
+    */
 }
 
 #endif
