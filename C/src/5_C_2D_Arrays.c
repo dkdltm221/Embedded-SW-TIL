@@ -38,7 +38,7 @@ int main(void){
 
 #endif
 
-#if 1
+#if 0
 
 // a,b 값이 copy
 void func1(int a, int b){
@@ -56,6 +56,10 @@ void func3(int (*p1)[5],int *p2){
         p2[i]+= 5;
     }
 }
+//p[0][1] = (*p)[1],*((*p)+1),*(p[0]+1)
+//p[1][2] = *(*(p+1)+2), *(p[1]+2), (*(p+1))[2]
+//p[1][2][3] = *(*(*(p+1)+2)+3),(*(p[1]+2))[3],(*(p+1))[2][3],  *((*(p+1))[2]+3) , *(*(p[1]+2)+3),*(p[1][2]+3)
+//p[3][0] = **(p+3),(*(p+3))[0], *(p[3])
 
 void func4(int (*p1)[5]){
     for(int i=0;i<SIZE(*p1);i++) (*p1)[i]+= 5;
@@ -74,6 +78,33 @@ int main(void){
     print_data(arr,SIZE(arr));
     func4(&arr);
     print_data(arr,SIZE(arr));
+    return 0;
+}
+
+#endif
+
+#if 1
+
+void func1(int(*p)[4],int r){
+    int c = sizeof(*p)/sizeof((*p)[0]);
+    
+    for(int i=0;i<r*c;i++) printf("%d ",*(*p+i));
+    printf("\n");
+}
+// 개수만 유지된다면 형변환을 자유롭게 할수있다.
+void func2(int(*p)[4],int r){
+    int c = SIZE(*p);
+    int n = r*c;
+    int (*p2)[6] = (int(*)[6]) p;
+    c = 6; r = n/c;
+    //3차원
+    int (*p3)[2][3] = (int(*)[2][3])p;
+}
+
+int main(void){
+    int arr[3][4] = {1,2,3,4,5,6,7,8,9,10,11,12};
+    func1(arr, 3);
+    func2((int*)arr,12);
     return 0;
 }
 
