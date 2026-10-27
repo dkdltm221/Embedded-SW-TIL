@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #define SIZE(x) (sizeof(x) / sizeof((x)[0]))
-
-#if 1
+#include "day3_lib.h"
+#if 0
 
 void func(char(*p)[10]){
     printf("%d %d\n",sizeof(p),sizeof(*p));
@@ -33,6 +33,47 @@ int main(void){
     func3(str2);
     char (*p)[10] = func5(); // 문제점 몇개있는지를 모름
     
+    return 0;
+}
+
+#endif
+
+#if 1
+
+// a,b 값이 copy
+void func1(int a, int b){
+    a = 20;
+}
+// int가 저장된 메모리의 주소 2개를 copy -> 주소에 접근해서 int값을 읽거나 쓰기 할 수 있음
+void func2(int* ap,int* bp){
+    int temp = *ap;
+    *ap = *bp;
+    *bp = temp;
+}
+
+void func3(int (*p1)[5],int *p2){
+    for(int i=0;i<5;i++){
+        p2[i]+= 5;
+    }
+}
+
+void func4(int (*p1)[5]){
+    for(int i=0;i<SIZE(*p1);i++) (*p1)[i]+= 5;
+}
+
+int main(void){
+    int a = 10, b= 20;
+    printf("%d %d\n",a,b);
+    func2(&a,&b); // func2에게 a,b변수에 접근해서 R/W를 할 수 있도록 허용
+    printf("%d %d\n",a,b);
+
+    int arr[5] = {1,2,3,4,5};
+    printf("%p %p %p\n",&arr,arr,&arr[0]);
+    print_data(arr,SIZE(arr));
+    func3(&arr,arr);
+    print_data(arr,SIZE(arr));
+    func4(&arr);
+    print_data(arr,SIZE(arr));
     return 0;
 }
 
