@@ -101,10 +101,27 @@ void func2(int(*p)[4],int r){
     int (*p3)[2][3] = (int(*)[2][3])p;
 }
 
+void func3(int(*p)[3][4]){
+    int r = SIZE(*p);
+    int c = SIZE((*p)[0]);
+    printf("%d %d\n",r,c);
+}
+
+void func4(int(*p)[2][3][4]){
+    int k = sizeof(*p)/sizeof(**p);
+    int r = sizeof(**p)/sizeof(***p);
+    int c = sizeof(***p)/sizeof(****p);
+    printf("%d %d %d\n",k,r,c);
+
+}
+
 int main(void){
     int arr[3][4] = {1,2,3,4,5,6,7,8,9,10,11,12};
-    func1(arr, 3);
-    func2((int*)arr,12);
+    int b[2][3][4] = {0};
+    //func1(arr, 3);
+    //func2((int*)arr,12);
+    func3(&arr);
+    func4(&b);
     return 0;
 }
 
