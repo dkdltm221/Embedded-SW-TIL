@@ -2,13 +2,24 @@
 #include <stdio.h>
 #include <string.h>
 #define SIZE(x) (sizeof(x) / sizeof((x)[0]))
-#include "day3_lib.h"
+#include "day6_lib.h"
 
-#if 1
+#if 0
 
 int main(void){
     int a[3][4] = {0};
     printf("%d\n",sizeof(a[-1]));
 }
+
+#endif
+
+#if 1
+
+int main(void){
+    int a[3][4] = {100,2,3,4,5,6,7,8,9,10,11,12};
+    print_2D(&a);
+
+}
+
 
 #endif

@@ -166,3 +166,23 @@ char *ptr[] = {"red", "orange", "pink", "white",
 | 6 | `ptr[3] + 2` | `%s` | `ite` |
 
 **`%c`는 문자 하나, `%s`는 전달한 주소부터 `\0`까지** 출력한다. ④는 `ptr[1][1]`, 즉 `"orange"`의 두 번째 문자이다.
+
+![문자열 포인터 배열 문제](./img/12-12.png)
+
+```c
+int A[3][4] = { 0 };
+
+printf("%p %p %p %p %p\n", &A, A, &A[0], A[0], &A[0][0]);
+
+printf("%zu %zu %zu %zu %zu\n",
+       sizeof(&A), sizeof(A), sizeof(&A[0]), sizeof(A[0]), sizeof(&A[0][0]));
+
+printf("%p %p %p %p %p\n", &A+1, A+1, &A[0]+1, A[0]+1, &A[0][0]+1);
+
+//실행 결과
+
+008FF820 008FF820 008FF820 008FF820 008FF820
+4 48 4 16 4
+008FF850 008FF830 008FF830 008FF824 008FF824
+```c
+
