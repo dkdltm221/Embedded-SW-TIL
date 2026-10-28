@@ -13,7 +13,7 @@ int main(void){
 
 #endif
 
-#if 1
+#if 0
 
 int main(void){
     int a[3][4] = {100,2,3,4,5,6,7,8,9,10,11,12};
@@ -21,5 +21,18 @@ int main(void){
 
 }
 
+
+#endif
+
+#if 1
+
+int main(void){
+    int a = 10, b=5;
+    int *ap = &a, *bp =&b;
+    int** app = &ap, **bpp = &bp;
+
+    
+    return 0;
+}
 
 #endif
