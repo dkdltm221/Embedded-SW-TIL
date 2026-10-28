@@ -122,6 +122,8 @@ int main(void){
     //func2((int*)arr,12);
     func3(&arr);
     func4(&b);
+    int a[3][4] = {1,2,3,4,5,6,7,8,9,10,11,12}; 
+    printf("%zu",2[*a]);
     return 0;
 }
 
