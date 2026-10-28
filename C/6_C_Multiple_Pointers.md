@@ -329,3 +329,73 @@ int main(void) {
 
 ![포인터_배열](./img/13-5.png)
 
+### Pointer Array Review — 포인터 배열 복습
+
+![포인터 배열의 구조](./img/13-6.png)
+
+각 원소에 **다른 배열의 시작 주소**를 저장한다. 이 배열을 함수에 전달하면 첫 번째 포인터 원소의 주소가 전달되므로 `char **`, `int **`로 받는다.
+
+아래 두 예제는 `<stdio.h>`와 `SIZE` 매크로를 준비한 뒤 각각 실행한다. `SIZE(x)`는 `sizeof(x) / sizeof((x)[0])`로 배열의 원소 개수를 구하는 매크로이다.
+
+#### 1. 문자열 포인터 배열 출력
+
+```c
+void func(char **p, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%s ", *(p + i)); // p[i]와 같음
+    }
+    printf("\n");
+}
+
+int main(void) {
+    char *pary[5] = {"apple", "banana", "kiwi", "orange", "melon"};
+    func(pary, SIZE(pary));
+    return 0;
+}
+```
+
+```text
+apple banana kiwi orange melon
+```
+
+`p[i]`는 i번째 문자열의 시작 주소이고, `p[i][j]`는 그 문자열의 j번째 문자이다. `%s`에는 문자열의 주소인 `p[i]`를 전달한다.
+
+#### 2. 길이가 다른 정수 배열 출력
+
+각 배열의 **첫 원소에는 데이터 개수**, 그 뒤에는 실제 데이터를 저장한다.
+
+```c
+void func(int **p, int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 1; j <= p[i][0]; j++) {
+            printf("%d ", p[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main(void) {
+    int a[] = {3, 1, 2, 3};
+    int b[] = {5, 10, 20, 30, 40, 50};
+    int c[] = {4, 5, 6, 7, 8};
+    int *ary[] = {a, b, c};
+
+    func(ary, SIZE(ary));
+    return 0;
+}
+```
+
+```text
+1 2 3
+10 20 30 40 50
+5 6 7 8
+```
+
+| 표현 | 의미 |
+| --- | --- |
+| `n` | 정수 배열의 개수: 3 |
+| `p[i]` | i번째 정수 배열의 시작 주소 |
+| `p[i][0]` | 그 배열에 저장된 데이터 개수: 3, 5, 4 |
+| `p[i][j]` (`j >= 1`) | 출력할 실제 데이터 |
+
+반복문은 개수를 저장한 0번 칸을 건너뛰고 **1번부터 개수만큼 출력**한다. 길이는 포인터가 자동으로 알려주는 것이 아니라, 첫 원소에 직접 저장해 둔 값이다.
