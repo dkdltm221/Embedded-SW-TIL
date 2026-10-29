@@ -11,6 +11,9 @@ void swap(int *pa,int *pb);
 int findmax_ary(int* arr,int n);
 int findmin_ary(int* arr,int n);
 void sort_data(int*arr , int n);
+int comp_asc(int a, int b);
+int comp_desc(int a,int b);
+void sort_data2(int*arr , int n,int (*comp)(int,int));
 #endif
 
 

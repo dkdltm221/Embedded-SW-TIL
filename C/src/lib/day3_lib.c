@@ -66,6 +66,24 @@ void sort_data(int*arr , int n){
     }
 }
 
+// comp : 정수 2개를 비교하여  교환이 있어야 하는 경우 1, 교환을 하지 않아야 하는 경우 0 반환
+int comp_asc(int a, int b){
+    return a>b;
+}
+int comp_desc(int a,int b){
+    return a<b;
+}
+
+void sort_data2(int*arr , int n,int (*comp)(int,int)){
+    for(int i=0;i<n;i++){
+        for(int j=i;j<n;j++){
+            if(comp(*(arr+i),*(arr+j))){
+                swap(arr+i,arr+j);
+            }
+        }
+    }
+}
+
 
 
 #endif
