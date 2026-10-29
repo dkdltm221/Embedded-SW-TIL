@@ -1,7 +1,82 @@
 #include "day7_lib.h"
 #include "day3_lib.h"
 
+
 #if 1
+
+int* pi;
+double* pd;
+int main(void){
+    pi = (int*)malloc(10*sizeof(int));
+    if (pi == NULL){
+        printf("메모리부족");
+        exit(1);
+    }
+    pd = (double*)malloc(10*sizeof(double));
+    if(pd==NULL){
+        printf("메모리 부족");
+        exit(1);
+    }
+    printf("%p %p\n",pi,pd);
+    free(pi); free(pd);
+
+    return 0;
+}
+
+
+
+#endif
+
+
+
+
+#if 0
+int main(void){
+    void* vp;
+    int a= 10;
+    double b = 3.14;
+    vp = &a;
+    printf("%d\n",*(int*)vp);
+    vp = &b;
+    printf("%.f\n",*(double*)vp);
+    vp = sum;
+    printf("%d",(*(int(*)(int,int))vp)(10,20));
+    return 0;
+}
+
+#endif
+
+
+
+
+
+
+#if 0
+
+typedef int (*FP1)(int);
+typedef int (*FP2)(int,int);
+typedef FP2(*FP3)(int,int);
+
+//int (* (*act(int x, FP1))(int, int))(int, int);
+
+
+int (*get_function(int no))(int,int){
+    static int (*fp[])(int,int) = {sum,sub,mul,divi};
+    return fp[no];
+}
+
+int main(void){
+    int(*function)(int,int);
+    function = get_function(1);
+
+    return 0;
+}
+
+#endif
+
+
+
+#if 0
 
 typedef struct _score_t {
     int kor;
