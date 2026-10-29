@@ -1,6 +1,6 @@
 # DAY 07 — 함수 포인터
 
-## 1. 배열의 이름은 함수 포인터이다.
+## 1. 함수 이름과 함수 포인터
 
 ```c
 int func(int a, int b) {
@@ -13,42 +13,123 @@ int main(void) {
 }
 ```
 
-- 포인터에 참조연산자를 사용하면 가리키는 대상을 참조할 수 있듯, 함수명에도 참조연산자를 사용하여 그것이 가리키는 함수의 기능을 사용할 수 있음.
-- 함수 이름은 함수의 주소를 나타내는 함수 포인터로 사용될 수 있음.
-- `func(10, 20)`과 `(*func)(10, 20)`은 동일하게 동작함.
-- 함수 포인터에 `*` 연산자를 여러 번 사용해도 함수를 호출할 수 있음.
+- 함수 이름은 대부분의 식에서 함수의 주소를 나타내는 함수 포인터로 변환된다.
+- `func(10, 20)`과 `(*func)(10, 20)`은 동일하게 동작한다.
+- 함수 포인터를 역참조한 결과는 다시 함수를 나타내므로, `*`를 여러 번 붙여도 호출할 수 있다.
 
 ## 2. 함수 포인터의 필요성
 
-- 같은 동작을 하는데 일부분만 다를 때, 다른 부분만 함수로 만들어 사용함. (코드량이 줄어듦)
-- 즉, 어떤 함수의 동작을 모두 구현하지 않고 일부는 비워둔 상태에서, 그 비워둔 일부 기능을 다른 사람이 정의하여 사용하도록 할 때 사용함.
+- 공통 동작은 유지하고, 달라지는 부분을 함수로 만들어 전달한다.
+- 호출할 함수를 외부에서 지정할 수 있어 코드 중복을 줄일 수 있다.
 
 ### 예시: qsort()
 
-- `qsort()`의 경우 정렬 기준을 함수 포인터로 전달함.
-- `int (*func)(const void*, const void*)` 형태의 비교 함수를 작성하여 함수 이름을 인자로 전달해야 함.
-- 이를 통해 오름차순, 내림차순 등 정렬 기준을 사용자가 직접 정의할 수 있음.
+- `qsort()`는 정렬 기준을 비교 함수의 포인터로 전달받는다.
+- 비교 함수의 포인터형은 `int (*)(const void *, const void *)`이며, 작성한 함수의 이름을 인자로 전달한다.
+- 오름차순·내림차순 등 정렬 기준을 사용자가 정할 수 있다.
 
 ## 3. 함수 포인터 변수 및 함수 포인터 배열
 
-- 함수 이름은 함수가 메모리의 어디에 위치하는지 나타내는 포인터 상수이다.
-- 함수 이름을 저장하는 함수 포인터 변수 및 함수 포인터 배열을 선언하고 초기화한 예를 살펴 보자.
+함수의 주소를 변수 하나에 저장하거나, 배열에 모아 저장할 수 있다.
 
 ```c
 int sum(int x, int y);
 int sub(int x, int y);
 int mul(int x, int y);
-int div(int x, int y);
+int divi(int x, int y);
 int mod(int x, int y);
 
 int (*my_func)(int, int) = sum;
-int (*func[5])(int, int) = { sum, sub, mul, div, mod };
+int (*func[5])(int, int) = {sum, sub, mul, divi, mod};
 ```
 
-- **함수 포인터 변수의 생성**
+- **함수 포인터 변수**: 반환형과 매개변수 목록은 그대로 두고, 함수 이름 부분을 `(*변수명)`으로 바꾼다.
+- **함수 포인터 배열**: `(*변수명[n])`처럼 괄호 안의 변수명 뒤에 `[n]`을 붙인다.
 
-  함수의 return, 함수의 parameter 목록 부분은 그대로 사용하고, **함수 이름 부분을 (*변수명)** 으로 변경한다.
+## 4. 함수 포인터 배열로 계산 결과 저장하기
 
-- **함수 포인터 배열의 생성**
+아래 예제는 각각 실행한다.
 
-  **함수 포인터 변수 뒤에 [n]** 을 붙여 생성한다.
+### 직접 작성한 배열 버전
+
+```c
+#include "day7_lib.h"
+
+int main(void) {
+    int (*my_func)(int, int) = sum;
+    int (*fp[])(int, int) = {sum, sub, mul, divi, mod};
+    int a = 25, b = 6;
+    int totalAry[SIZE(fp)] = {0};
+    int totalSum = 0;
+
+    for (int i = 0; i < SIZE(fp); i++) {
+        totalAry[i] = fp[i](a, b);
+        printf("totalAry[%d]: %d\t", i, totalAry[i]);
+        totalSum += totalAry[i];
+    }
+    printf("\ntotalSum: %d\n", totalSum);
+    return 0;
+}
+```
+
+### 다른 분의 동적 메모리 버전
+
+함수 포인터 배열의 원소 개수만큼 **`int` 결과를 저장할 공간**을 할당한다.
+
+```c
+#include "day7_lib.h"
+
+int main(void) {
+    int (*func[5])(int, int) = {sum, sub, mul, divi, mod};
+    int a = 25, b = 6;
+    int c = sizeof(func) / sizeof(*func);
+    int *storage = (int *)malloc(sizeof(int) * c);
+    int total = 0;
+
+    for (int i = 0; i < c; i++) {
+        total += storage[i] = func[i](a, b);
+    }
+    for (int i = 0; i < c; i++) {
+        printf("%dth result: %d\n", i + 1, storage[i]);
+    }
+    printf("total: %d", total);
+    free(storage);
+
+    return 0;
+}
+```
+
+### 교수님의 구조체 버전
+
+함수 포인터·이름·결과를 하나의 구조체에 묶어 관리한다.
+
+```c
+#include "day7_lib.h"
+
+typedef struct _my_t {
+    int (*fp)(int, int);
+    char *name;
+    int res;
+} my_t;
+
+int main(void) {
+    my_t funcs[] = {
+        {sum, "sum"},
+        {sub, "sub"},
+        {mul, "mul"},
+        {divi, "divi"},
+        {mod, "mod"}
+    };
+
+    int a = 25, b = 6;
+    int totalSum = 0;
+
+    for (int i = 0; i < SIZE(funcs); i++) {
+        funcs[i].res = funcs[i].fp(a, b);
+        totalSum += funcs[i].res;
+        printf("%s(%d,%d) = %d\n", funcs[i].name, a, b, funcs[i].res);
+    }
+
+    return 0;
+}
+```
