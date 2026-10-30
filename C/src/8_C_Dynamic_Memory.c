@@ -4,6 +4,143 @@
 
 
 #if 1
+typedef struct _profile {
+    int age;
+    char *color[3];
+    char name[20];
+}profile;
+
+typedef struct _student {
+    int num;
+    double grade;
+    profile prof;
+}student;
+
+void init_student(student* p, int n) {
+    for (int i = 0; i < n; ++i) {
+        scanf("%d %lf %d", &p[i].num, &p[i].grade, &p[i].prof.age);
+        char (*arr)[10] = (char(*)[10])calloc(3, sizeof(char[10]));
+        p[i].prof.color[0] = arr[0];
+        p[i].prof.color[1] = arr[1];
+        p[i].prof.color[2] = arr[2];
+        scanf("%s %s %s", p[i].prof.color[0], p[i].prof.color[1], p[i].prof.color[2]);
+        scanf("%s", p[i].prof.name);
+    }
+}
+
+void print_student(student* p, int n) {
+    for (int i = 0; i < n; ++i) {
+        printf("%d %.1f %d ", p[i].num, p[i].grade, p[i].prof.age);
+        printf("%s %s %s ", p[i].prof.color[0], p[i].prof.color[1], p[i].prof.color[2]);
+        printf("%s\n", p[i].prof.name);
+    }
+}
+
+void free_mem3(student* p, int n) {
+    if (p == NULL) return;
+    for (int i = 0; i < n; ++i) {
+        free(p[i].prof.color[0]);
+        p[i].prof.color[0] = 0;
+        p[i].prof.color[1] = 0;
+        p[i].prof.color[2] = 0;
+    }
+}
+
+int main(void) {
+    student stu[3] = { 0 };
+    freopen("student2.txt", "r", stdin);
+    init_student(stu, SIZE(stu));
+    print_student(stu, SIZE(stu));
+    free_mem3(stu, 3);
+    return 0;
+}
+
+#endif
+
+#if 0
+typedef struct _profile {
+    int age;
+    char *color[3];
+    char name[20];
+}profile;
+
+typedef struct _student {
+    int num;
+    double grade;
+    profile prof;
+}student;
+
+void print_student(student*p,int n){
+    for(int i=0;i<n;i++){
+        printf("%d %.1f %d %s %s %s %s\n",p[i].num,p[i].grade,p[i].prof.age
+            ,p[i].prof.color[0],p[i].prof.color[1],p[i].prof.color[2],p[i].prof.name);
+    }
+}
+void init_student(student *p,int n){
+    char str[20] = {0}; 
+   
+    for(int i=0;i<n;i++){
+      
+        scanf("%d %lf %d",&p[i].num,&p[i].grade,&p[i].prof.age);
+
+        for(int j=0;j<3;j++){
+            scanf("%s",str);
+            p[i].prof.color[j] = (char*)malloc(strlen(str) + 1);
+            strcpy(p[i].prof.color[j], str);
+        }
+        scanf("%s",p[i].prof.name);
+
+    }
+}
+
+
+int main(void) {
+    freopen("student2.txt", "r", stdin);
+    student stu[3] = {0};
+    init_student(stu,SIZE(stu));
+    print_student(stu,SIZE(stu));
+    for(int i=0;i<SIZE(stu);i++){
+        for(int j=0;j<3;j++){
+            free_mem((void**)&stu[i].prof.color[j]);
+        }
+    }
+    return 0;
+}
+#endif
+
+
+
+#if 0
+
+typedef struct student{
+    int num;
+    double grade;
+    char name[20];
+}my_student;
+
+void print_student(my_student*p,int n){
+    for(int i=0;i<n;i++){
+        printf("%d %.1f %s\n",p[i].num,p[i].grade,p[i].name);
+    }
+}
+void init_student(my_student *p,int n){
+    
+    for(int i=0;i<n;i++){
+        scanf("%d %lf %s",&p[i].num,&p[i].grade,p[i].name);
+    }
+}
+
+int main(void){
+    freopen("student.txt", "r", stdin);
+    my_student sarry[4] = {0};
+    init_student(sarry,SIZE(sarry));
+    print_student(sarry,SIZE(sarry));
+    return 0;
+}
+
+#endif
+
+#if 0
 struct student{
     int num;
     double grade;

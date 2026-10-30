@@ -347,3 +347,164 @@ void print_studentP(const my_student *p) {
 | `print_studentP(&b)` | 구조체의 주소 전달 | 원본을 가리킴. 출력만 하므로 `const`로 수정 제한 |
 
 **`p->num`은 `(*p).num`과 같다.** 구조체가 크면 주소 전달로 복사 부담을 줄일 수 있지만, 값 전달이 항상 낭비이거나 포인터 전달이 항상 빠른 것은 아니다.
+
+
+### 5. 구조체 배열을 파일에서 입력받기
+
+앞에서 선언한 `my_student`를 사용한다. 다른 예제의 같은 이름 함수와는 구분해 각각 실행한다.
+
+```c
+void print_student(my_student *p, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d %.1f %s\n", p[i].num, p[i].grade, p[i].name);
+    }
+}
+
+void init_student(my_student *p, int n) {
+    for (int i = 0; i < n; i++) {
+        scanf("%d %lf %19s", &p[i].num, &p[i].grade, p[i].name);
+    }
+}
+
+int main(void) {
+    freopen("student.txt", "r", stdin);
+    my_student sarry[4] = {0};
+    init_student(sarry, SIZE(sarry));
+    print_student(sarry, SIZE(sarry));
+    return 0;
+}
+```
+
+## 9. 구조체 실습 — 학생 프로필과 색상 저장
+
+학생 정보 안에 `profile` 구조체를 넣는다. **`name[20]`에는 문자를 직접 저장하고, `color[3]`에는 문자열의 주소 3개를 저장**한다.
+
+### 공통 구조체와 출력 함수
+
+```c
+typedef struct _profile {
+    int age;
+    char *color[3];
+    char name[20];
+} profile;
+
+typedef struct _student {
+    int num;
+    double grade;
+    profile prof;
+} student;
+
+void print_student(student *p, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d %.1f %d ", p[i].num, p[i].grade, p[i].prof.age);
+        printf("%s %s %s ", p[i].prof.color[0],
+               p[i].prof.color[1], p[i].prof.color[2]);
+        printf("%s\n", p[i].prof.name);
+    }
+}
+```
+
+입력 파일은 다음 순서로 구성한다. 아래 실습은 파일의 내용과 학생 수가 맞는다고 가정한다.
+
+```text
+번호 학점 나이 색상1 색상2 색상3 이름
+1 4.3 20 blue white green tom
+```
+
+### 1. 색상 3개를 한 번에 할당
+
+[실습 코드](./src/8_C_Dynamic_Memory.c)
+
+```c
+void init_student(student *p, int n) {
+    for (int i = 0; i < n; i++) {
+        scanf("%d %lf %d", &p[i].num, &p[i].grade, &p[i].prof.age);
+
+        char (*arr)[10] = (char (*)[10])calloc(3, sizeof(char[10]));
+        if (arr == NULL) exit(1);
+
+        p[i].prof.color[0] = arr[0];
+        p[i].prof.color[1] = arr[1];
+        p[i].prof.color[2] = arr[2];
+
+        scanf("%9s %9s %9s", p[i].prof.color[0],
+              p[i].prof.color[1], p[i].prof.color[2]);
+        scanf("%19s", p[i].prof.name);
+    }
+}
+
+void free_mem3(student *p, int n) {
+    if (p == NULL) return;
+    for (int i = 0; i < n; i++) {
+        free(p[i].prof.color[0]); // 시작 주소로 30바이트 전체 해제
+        for (int j = 0; j < 3; j++) {
+            p[i].prof.color[j] = NULL;
+        }
+    }
+}
+```
+
+학생마다 `calloc` 한 번으로 **30바이트짜리 덩어리 하나**를 확보한다. `arr[0]`, `arr[1]`, `arr[2]`는 그 공간 안에서 10바이트씩 떨어진 주소이다.
+
+```text
+할당 시작 → [문자 10칸][문자 10칸][문자 10칸]
+              ↑           ↑           ↑
+           color[0]    color[1]    color[2]
+```
+
+**주소를 저장하는 것은 새로 할당하는 동작이 아니다.** `arr + 1`이 10바이트 이동하는 이유는 가리키는 자료형이 `char[10]`이기 때문이다.
+
+해제할 때도 시작 주소인 `color[0]`으로 **한 번만 해제**한다. 중간 주소인 `color[1]`, `color[2]`는 따로 해제하면 안 된다. `free`는 할당기가 관리하는 정보를 이용해 덩어리 전체를 해제한다.
+
+### 2. 색상마다 길이에 맞춰 따로 할당
+
+위 방식 대신 사용할 `init_student`, `free_mem3`이다. 구조체와 출력 함수는 공통 코드를 사용한다.
+
+```c
+void init_student(student *p, int n) {
+    char str[20];
+    for (int i = 0; i < n; i++) {
+        scanf("%d %lf %d", &p[i].num, &p[i].grade, &p[i].prof.age);
+
+        for (int j = 0; j < 3; j++) {
+            scanf("%19s", str);
+            p[i].prof.color[j] = (char *)malloc(strlen(str) + 1);
+            if (p[i].prof.color[j] == NULL) exit(1);
+            strcpy(p[i].prof.color[j], str);
+        }
+        scanf("%19s", p[i].prof.name);
+    }
+}
+
+void free_mem3(student *p, int n) {
+    if (p == NULL) return;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < 3; j++) {
+            free_mem((void **)&p[i].prof.color[j]); // 실습에서 사용한 해제 함수
+        }
+    }
+}
+```
+
+이 방식은 학생마다 **3번 할당하므로, 색상 공간도 각각 해제**한다. `free_mem`의 강제 형 변환 방식에 대한 설명은 7번 실습과 같다.
+
+### 공통 실행 코드
+
+두 방식 중 **한 가지의 입력·해제 함수를 선택**해 사용한다.
+
+```c
+int main(void) {
+    freopen("student2.txt", "r", stdin);
+    student stu[3] = {0};
+
+    init_student(stu, SIZE(stu));
+    print_student(stu, SIZE(stu));
+    free_mem3(stu, SIZE(stu));
+    return 0;
+}
+```
+
+| 방식 | 학생 1명당 할당 | 해제 | 공간 사용 |
+| --- | --- | --- | --- |
+| 한 번에 할당 | 30바이트 한 덩어리 | 시작 주소로 1번 | 색상마다 10칸 고정 |
+| 각각 할당 | 문자열별로 3덩어리 | 각 주소로 3번 | 입력한 문자열 길이 + `\0` |
