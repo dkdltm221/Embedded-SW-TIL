@@ -2,30 +2,7 @@
 #include "day3_lib.h"
 
 
-#if 1
 
-int* pi;
-double* pd;
-int main(void){
-    pi = (int*)malloc(10*sizeof(int));
-    if (pi == NULL){
-        printf("메모리부족");
-        exit(1);
-    }
-    pd = (double*)malloc(10*sizeof(double));
-    if(pd==NULL){
-        printf("메모리 부족");
-        exit(1);
-    }
-    printf("%p %p\n",pi,pd);
-    free(pi); free(pd);
-
-    return 0;
-}
-
-
-
-#endif
 
 
 
