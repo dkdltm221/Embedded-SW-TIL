@@ -1,5 +1,5 @@
-#ifndef __DAY7_LIB_H__
-#define __DAY7_LIB_H__
+#ifndef DAY8_LIB_H
+#define DAY8_LIB_H
 
 #define _CRT_SECURE_NO_WARINGS
 #include <stdio.h>
@@ -9,5 +9,6 @@
 
 
 
-void free_mem(int **p);
+void free_mem(void **p);
+void free_mem2(void ***p,int n);
 #endif

@@ -1,8 +1,44 @@
 #include "day8_lib.h"
 #include "day3_lib.h"
-
+#include "day7_lib.h"
 
 #if 1
+//이중포인터 할당
+typedef char c21[21];
+
+int main(void){
+    int N;
+    char str[21] = {0};
+    char** parr = NULL;
+    freopen("data.txt", "r",stdin);
+    scanf("%d",&N);
+    printf("%d\n",N);
+    parr = (char**)calloc(N,sizeof(char*)); //char*를 3개저장하고싶은거야 문자열을 저장하려고 문자열을 저장할공간을 이제 받아야겠지?
+    if(parr == NULL){
+        return 12;
+    }
+
+    for(int i=0;i<N;++i){
+        scanf("%s",str);
+        //parr[i]= str;// str의 주소를 넘기기때문에 결국다같은주소가 저장이된다.
+        parr[i] = (char*)malloc(strlen(str)+1);
+        if (parr[i] == NULL) {
+            free_mem2((void***)&parr, i);   // 지금까지 할당한 i개만 해제
+            return 12;
+        }
+        strcpy(parr[i],str);
+    }
+    print_strdata(parr,N);
+    free_mem2((void***)&parr,N);
+    printf("parr == NULL: %d\n", parr == NULL);
+    return 0;
+}
+
+
+#endif
+
+
+#if 0
 
 int main(void){
     int N;

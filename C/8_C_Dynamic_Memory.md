@@ -178,3 +178,98 @@ int main(void) {
 - `char (*arr)[21]`: `char` 21개짜리 행을 가리키는 포인터이다.
 - `sizeof(*arr)`, `sizeof(char[21])`, `21 * sizeof(char)`는 모두 **21바이트**이다. `calloc`으로 그 행을 `N`개 확보한다.
 - `arr[i]`는 i번째 행의 시작 주소이다. `%20s`로 최대 20바이트를 읽고 마지막 한 칸은 `\0`에 사용한다.
+
+## 7. 실습 — 이중 포인터로 문자열 저장
+
+문자열의 주소를 저장할 **포인터 배열**과, 실제 문자열을 저장할 **각각의 공간**을 따로 할당한다.
+
+```text
+parr → [주소] → "apple"
+       [주소] → "banana"
+       [주소] → "kiwi"
+```
+
+### 1. 할당하고 문자열 복사하기
+
+[실습 코드](./src/8_C_Dynamic_Memory.c)
+
+`data.txt`에서 문자열 개수 `N`을 먼저 읽는다. 아래 예제는 파일에 올바른 개수와 문자열이 들어 있다고 가정한다.
+
+```c
+#include "day8_lib.h"
+#include "day7_lib.h"
+
+int main(void) {
+    int N;
+    char str[21] = {0};
+    char **parr = NULL;
+
+    freopen("data.txt", "r", stdin);
+    scanf("%d", &N);
+    printf("%d\n", N);
+
+    parr = (char **)calloc(N, sizeof(char *)); // 주소를 저장할 N칸
+    if (parr == NULL) return 12;
+
+    for (int i = 0; i < N; i++) {
+        scanf("%20s", str);
+        parr[i] = (char *)malloc(strlen(str) + 1); // 문자열과 '\0'의 공간
+        if (parr[i] == NULL) {
+            free_mem2((void ***)&parr, i); // 지금까지 할당한 i개 정리
+            return 12;
+        }
+        strcpy(parr[i], str); // 주소가 아니라 내용을 복사
+    }
+
+    print_strdata(parr, N);
+    free_mem2((void ***)&parr, N);
+    printf("parr == NULL: %d\n", parr == NULL);
+    return 0;
+}
+```
+
+| 코드 | 역할 |
+| --- | --- |
+| `calloc(N, sizeof(char *))` | 문자열 주소를 저장할 포인터 N개 확보 |
+| `malloc(strlen(str) + 1)` | 문자열 길이와 끝의 `\0`만큼 별도 공간 확보 |
+| `strcpy(parr[i], str)` | 입력한 문자열 내용을 각 공간에 복사 |
+
+**`parr[i] = str`은 주소만 복사**하므로 모든 원소가 같은 `str`을 가리킨다. 입력할 때마다 덮어쓰므로 마지막 문자열만 반복 출력된다.
+
+### 2. 문자열부터 해제하고 포인터 배열 해제하기
+
+[해제 함수 구현](./src/lib/day8_lib.c)
+
+```c
+void free_mem(void **p) {
+    if (p == NULL) return;
+    free(*p);
+    *p = NULL;
+}
+
+void free_mem2(void ***p, int n) {
+    if (p == NULL || *p == NULL) return;
+
+    for (int i = 0; i < n; i++) {
+        free_mem(&(*p)[i]); // 각 문자열 공간 해제 후 포인터를 NULL로 변경
+    }
+    free(*p);  // 포인터 배열 공간 해제
+    *p = NULL; // 호출한 쪽의 parr를 NULL로 변경
+}
+```
+
+- `free_mem`: 할당 공간 하나를 해제하고 해당 포인터를 `NULL`로 변경한다.
+- `free_mem2`: 문자열들을 먼저 해제한 뒤 포인터 배열을 해제한다. **`free(parr)`만으로는 문자열 공간이 함께 해제되지 않는다.**
+- `p == NULL`은 포인터 변수의 주소를 받았는지, `*p == NULL`은 포인터 배열이 이미 널인지 검사한다.
+
+실습에서 사용한 `void ***` 강제 형 변환 표기는 유지했다. 다만 `char ***`와 `void ***`가 자동 호환되는 것은 아니며, 이 방식의 표준 C 이식성은 보장되지 않는다.
+
+### 실행 결과
+
+```text
+3
+apple banana kiwi
+parr == NULL: 1
+```
+
+마지막 `1`은 `parr`가 `NULL`로 바뀌었다는 뜻이다.
