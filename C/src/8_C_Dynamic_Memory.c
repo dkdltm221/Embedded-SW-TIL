@@ -2,7 +2,82 @@
 #include "day3_lib.h"
 #include "day7_lib.h"
 
+
 #if 1
+struct student{
+    int num;
+    double grade;
+    char name[20];
+};
+typedef struct student my_student;
+void print_student(my_student a){
+    printf("%d %.1f %s\n",a.num,a.grade,a.name);
+}
+void print_studentP(my_student*p){
+    printf("%d %.1f %s\n",p->num,p->grade,p->name);
+}
+int main(void){
+    struct student a = {1,4.3,"Soyoung Yoon"};
+    my_student b;
+    b=a;//복사!!
+    b.num=2;
+    print_student(b);
+    print_studentP(&b);
+  
+    return 0;
+}
+
+#endif
+
+// 숙제 - 큰 메모리를 한 번 할당받아 그 메모리에 주소 및 문자를 모두 저장
+// 모두 저장 후, realloc을 사용해 불필요한 메모리 반환하여 보세요.
+#if 0
+
+char** get_data(int n) {
+    char** parr = NULL;
+    char str[21] = { 0 };
+    parr = (char**)calloc(n, sizeof(char*));
+    printf("%p\n", parr);
+    if (parr == NULL) {
+        return NULL;
+    }
+    for (int i = 0; i < n; ++i) {
+        scanf("%s", str);
+        printf("%s\n", str);
+        parr[i] = (char*)malloc(strlen(str) + 1);
+        if (parr[i] == NULL) {
+            free_mem2(&parr, i);
+            return NULL;
+        }
+        strcpy(parr[i], str);
+    }
+    return parr;
+}
+
+int main(void) {
+    int n;
+    char str[21] = { 0 };
+    char** parr = NULL;
+    freopen("data.txt", "r", stdin);
+    scanf("%d", &n);
+
+    parr = (char**)malloc(1000);
+    if (parr == NULL) {
+        return 12;
+    }
+    parr[0] = (char*)parr + n;  // 시작주소 + sizeof(char*) * n
+    printf("%p %p\n", parr, parr[0]);
+    //for (int i = 0; i < n; ++i) {
+    //    scanf("%s", parr[0]);
+
+    //}
+    return 0;
+}
+
+#endif
+
+
+#if 0
 //이중포인터 할당
 typedef char c21[21];
 

@@ -273,3 +273,77 @@ parr == NULL: 1
 ```
 
 마지막 `1`은 `parr`가 `NULL`로 바뀌었다는 뜻이다.
+
+
+## 8. 구조체
+
+![구조체 선언](./img/16-1.png)
+
+### 1. 선언과 자료형 별칭
+
+서로 다른 자료형의 데이터를 하나로 묶는다. `typedef`로 자료형에 별칭을 붙일 수 있다.
+
+```c
+struct student {
+    int num;
+    double grade;
+    char name[20];
+};
+
+typedef struct student my_student;
+```
+
+`struct student`와 `my_student`는 같은 자료형이다. 앞서 배운 배열 포인터에도 같은 방식으로 별칭을 붙인다.
+
+```c
+typedef int (*ip)[10];
+ip x; // int (*x)[10];과 같음
+```
+
+### 2. 구조체 대입은 멤버의 값 복사
+
+아래 코드는 함수 안에서 사용한다. 문자열 복사에는 `<string.h>`가 필요하다.
+
+```c
+struct student a = {1, 4.3, "Soyoung Yoon"};
+my_student b;
+b = a; // num, grade, name 배열의 내용까지 복사
+
+b.num = 2;
+strcpy(b.name, "yunbin");
+
+printf("%d %.1f %s\n", a.num, a.grade, a.name); // 1 4.3 Soyoung Yoon
+printf("%d %.1f %s\n", b.num, b.grade, b.name); // 2 4.3 yunbin
+```
+
+`name`은 포인터가 아니라 구조체 안의 `char[20]` 배열이다. **복사한 두 구조체는 각자의 배열을 가지므로, `b.name`을 바꿔도 `a.name`은 바뀌지 않는다.**
+
+### 3. 문자 배열의 초기화와 변경
+
+| 코드 | 가능 여부 | 의미 |
+| --- | --- | --- |
+| `my_student a = {1, 4.3, "hello"};` | 가능 | 구조체를 만들면서 배열 초기화 |
+| `a.name[5] = 'a';` | 가능 | 배열의 문자 한 칸 변경 |
+| `strcpy(a.name, "yunbin");` | 가능 | 배열에 문자열 내용 복사 |
+| `a.name = "yunbin";` | 불가 | 배열 전체에는 `=`로 대입할 수 없음 |
+
+초기화의 `=`와 선언 후 대입의 `=`는 문법이 다르다. 새 문자열은 **끝의 `\0`까지 20칸 안에 들어가야 한다.**
+
+### 4. 함수에 값 전달과 주소 전달
+
+```c
+void print_student(my_student a) {
+    printf("%d %.1f %s\n", a.num, a.grade, a.name);
+}
+
+void print_studentP(const my_student *p) {
+    printf("%d %.1f %s\n", p->num, p->grade, p->name);
+}
+```
+
+| 호출 | 전달 방식 | 특징 |
+| --- | --- | --- |
+| `print_student(b)` | 구조체 값 전달 | 복사본을 사용하므로 함수 안에서 바꿔도 원본은 그대로 |
+| `print_studentP(&b)` | 구조체의 주소 전달 | 원본을 가리킴. 출력만 하므로 `const`로 수정 제한 |
+
+**`p->num`은 `(*p).num`과 같다.** 구조체가 크면 주소 전달로 복사 부담을 줄일 수 있지만, 값 전달이 항상 낭비이거나 포인터 전달이 항상 빠른 것은 아니다.
