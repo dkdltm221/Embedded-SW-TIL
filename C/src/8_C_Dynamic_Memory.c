@@ -3,7 +3,54 @@
 #include "day7_lib.h"
 
 
-#if 1
+
+#if 0
+
+char** get_data(int n) {
+    char str[21] = { 0 };
+    int BIG_SIZE = n*SIZE(str)+n*sizeof(char*);
+    char* mem = (char*)malloc(BIG_SIZE);   
+    if (mem == NULL) return NULL;
+
+    char** parr = (char**)mem;              
+    int used = n * sizeof(char*);        
+
+    for (int i = 0; i < n; ++i) {
+        scanf("%s", str);
+        parr[i] = mem + used;
+        strcpy(parr[i], str);
+        used += strlen(str) + 1;
+    }
+
+    mem = (char*)realloc(mem, used);        // 불필요한 메모리 반환
+    parr = (char**)mem;
+
+    char* p = mem + n * sizeof(char*);      
+    for (int i = 0; i < n; ++i) {
+        parr[i] = p;
+        p += strlen(p) + 1;
+    }
+
+    printf("사용한 메모리: %d / %d바이트\n", used, BIG_SIZE);
+    return parr;
+}
+
+int main(void) {
+    int n;
+    char** parr = NULL;
+    freopen("data.txt", "r", stdin);
+    scanf("%d", &n);
+    parr = get_data(n);
+    if (parr == NULL) return 12;
+    // print_strdata2(parr, n);
+    free(parr);
+    printf("%p\n", parr);
+    return 0;
+}
+
+#endif 
+
+#if 0
 typedef struct _profile {
     int age;
     char *color[3];
