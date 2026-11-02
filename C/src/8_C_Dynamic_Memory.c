@@ -2,59 +2,49 @@
 #include "day3_lib.h"
 #include "day7_lib.h"
 
+//포인터 배열도 동적할당, 배열의 멤버도 동적할당 받는 코드 작성
+// 아래놈이 해당 상수들의 주소를 가지고있다가 구조체에다가 넣어주는거여
 
 
-#if 0
+#if 1
+char* colors[] = { "white", "black", "blue", "red", "orange", "pink", "green", "grey" };
+typedef struct _profile {
+    int age;
+    char **color;
+    char *name;  // 이름이 나중에(사용중) 변경 가능하다고 가정함
+}profile;
 
-char** get_data(int n) {
-    char str[21] = { 0 };
-    int BIG_SIZE = n*SIZE(str)+n*sizeof(char*);
-    char* mem = (char*)malloc(BIG_SIZE);   
-    if (mem == NULL) return NULL;
+typedef struct _student {
+    int num;
+    double grade;
+    profile prof;
+}student;
 
-    char** parr = (char**)mem;              
-    int used = n * sizeof(char*);        
-
-    for (int i = 0; i < n; ++i) {
-        scanf("%s", str);
-        parr[i] = mem + used;
-        strcpy(parr[i], str);
-        used += strlen(str) + 1;
-    }
-
-    mem = (char*)realloc(mem, used);        // 불필요한 메모리 반환
-    parr = (char**)mem;
-
-    char* p = mem + n * sizeof(char*);      
-    for (int i = 0; i < n; ++i) {
-        parr[i] = p;
-        p += strlen(p) + 1;
-    }
-
-    printf("사용한 메모리: %d / %d바이트\n", used, BIG_SIZE);
-    return parr;
+student* init_student(int n) {
+    
 }
+typedef struct _student_m{
+    student* stu;
+    int n;
+}student_mng;
 
 int main(void) {
+    student *stu = { 0 };
     int n;
-    char** parr = NULL;
-    freopen("data.txt", "r", stdin);
-    scanf("%d", &n);
-    parr = get_data(n);
-    if (parr == NULL) return 12;
-    // print_strdata2(parr, n);
-    free(parr);
-    printf("%p\n", parr);
+    freopen("student3.txt", "r", stdin);
+    scanf("%d",&n);
+    stu = init_student(n);
+    if(stu=NULL) return 12;
+    print_student(stu, n);
+    free_mem(&stu); // 어떤것을 사용할지 찾기
     return 0;
 }
-
-#endif 
-
+#endif
 #if 0
 typedef struct _profile {
     int age;
     char *color[3];
-    char name[20];
+    char name[20]; //이름이 나중에(사용중) 변경 가능하다고 가정함
 }profile;
 
 typedef struct _student {
@@ -103,6 +93,58 @@ int main(void) {
 }
 
 #endif
+
+#if 0
+char** get_data(int n) {
+    char str[21] = { 0 };
+    int used = n * sizeof(char*);
+    int BIG_SIZE = used + n * SIZE(str);
+
+    char* mem = (char*)malloc(BIG_SIZE);
+    if (mem == NULL) return NULL;
+
+    char** parr = (char**)mem;
+    for (int i = 0; i < n; ++i) {
+        scanf("%s", str);
+        parr[i] = mem + used;
+        strcpy(parr[i], str);
+        used += strlen(str) + 1;
+    }
+    // 불필요한 메모리 반환 (메모리 축소 - 항상 성공 및 주소 유지를 보장하지 않음)
+    mem = (char*)realloc(mem, used);  
+    if (mem == NULL) {
+        free(parr);
+        return NULL;
+    }
+    // 혹시 초기의 mem이 변경된 경우 parr[i]에 있는 주소도 모두 변경
+    if ((char**)mem != parr) {
+        parr = (char**)mem;        
+        char* p = mem + n * sizeof(char*);
+        for (int i = 0; i < n; ++i) {
+            parr[i] = p;
+            p += strlen(p) + 1;
+        }
+    }
+
+    printf("사용한 메모리: %d / %d바이트\n", used, BIG_SIZE);
+    return parr;
+}
+
+int main(void) {
+    int n;
+    char** parr = NULL;
+    freopen("data.txt", "r", stdin);
+    scanf("%d", &n);
+    parr = get_data(n);
+    if (parr == NULL) return 12;
+    print_strdata(parr, n);
+    free_mem((void**)&parr);
+    printf("%p\n", parr);
+    return 0;
+}
+#endif
+
+
 
 #if 0
 typedef struct _profile {
