@@ -20,14 +20,50 @@ typedef struct _student {
     profile prof;
 }student;
 
-student* init_student(int n) {
-    
+int compareString(char* c){
+    for(int i=0;i<SIZE(colors);i++){
+        if(strcmp(c,colors[i])==0){
+            return i;
+        }
+    }
+    return -1;
 }
-typedef struct _student_m{
-    student* stu;
-    int n;
-}student_mng;
 
+student* init_student(int n) {
+    student* st = (student*)calloc(n,sizeof(student));
+    if(st==NULL)
+        return NULL;
+    for(int i=0;i<n;i++){
+        student stu = {0};
+        int m = 0;
+        scanf("%d %lf %d %d",&stu.num,&stu.grade,&stu.prof.age,&m);
+        stu.prof.color = calloc(m,sizeof(char*));
+        for(int j=0;j<m;j++){
+            char c[100];
+            scanf("%s",c);
+            int compN = compareString(c);
+            if(compN==-1){
+                printf("wrong data");
+                return NULL;
+            }
+            stu.prof.color[j] = colors[compN];
+        }
+        st[i] = stu;
+    }
+    return st;
+}
+// typedef struct _student_m{
+//     student* stu;
+//     int n;
+// }student_mng;
+void free_student(student** st,int n){
+    if(st==NULL || *st==NULL) return;
+    for(int i=0;i<n;i++){
+        free((*st)[i].prof.color);
+    }
+    free(*st);
+    *st=NULL;
+}
 int main(void) {
     student *stu = { 0 };
     int n;
@@ -36,7 +72,7 @@ int main(void) {
     stu = init_student(n);
     if(stu=NULL) return 12;
     print_student(stu, n);
-    free_mem(&stu); // 어떤것을 사용할지 찾기
+    free_student(&stu,n); // 어떤것을 사용할지 찾기
     return 0;
 }
 #endif

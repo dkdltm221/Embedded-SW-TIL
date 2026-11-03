@@ -4,6 +4,7 @@
 // 형재정의를 해보세요.
 typedef char C10[10];
 
+
 #if 1
 int printAry(char (*ary)[10], int size) {
     int i;
