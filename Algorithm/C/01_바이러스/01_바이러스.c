@@ -77,12 +77,25 @@ int virus_BFS1(int start){
     }
     return front-1;
 }
-
+int virus_BFS2(int start){
+    front = rear = 0;
+    enqueue(start);
+    visited[start] = 1;
+    while(front!=rear){
+        int node = dequeue();
+        for(int i=1;arr[node][i];i++){
+            if(visited[arr[node][i]]) continue;
+            visited[arr[node][i]]=1;
+            enqueue(arr[node][i]);  
+        }
+    }
+    return front-1;
+}
 int main(void){
     freopen("01_data.txt","r",stdin);
-    input_data();
+    input_data2();
     print_data(arr,V);
     // print_adj(arr,1);
-    printf("%d\n",virus_BFS1(1));
+    printf("%d\n",virus_BFS2(4));
 }
 #endif
