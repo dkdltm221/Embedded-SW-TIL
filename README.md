@@ -1,6 +1,6 @@
 # TheSSEN_TIL
 
-**LIG D&A The SSEN 임베디드 SW 5기 학습 기록**
+**LIG 임베디드 SW 5기 학습 기록**
 
 방산 임베디드 SW 개발자를 목표로, 교육에서 배운 개념과 실습 과정, 문제 해결 경험을 쌓아가는 TIL(Today I Learned) 저장소입니다.
 
