@@ -238,6 +238,107 @@ int main(void) {
 #endif
 
 #if 01
+
+typedef struct _stack{
+    int front,rear;
+}Stack;
+
+Stack stack;
+
+int solution(char* c){
+    int pice = 0;
+    stack.front = stack.rear = 0;
+    for(int i=0;c[i]!='\0';i++){
+        if(c[i]=='(' && c[i+1]==')'){
+            pice += stack.rear - stack.front;
+            i++;
+            continue;
+        }
+        if(c[i]=='(')
+            stack.rear++;
+        else if(stack.front != stack.rear){
+            pice++;
+            stack.front++;
+        }
+
+    }
+    return pice;
+}
+
+
+
+
+
+int main(void){
+    char c[100001];
+    scanf("%s",c);
+    printf("%d\n",solution(c));
+    return 0;
+
+}
+#endif
+
+#if 0
+
+#include <stdio.h>
+#define N 5
+
+typedef struct _node{
+    int r,c
+}node;
+
+node arr[N*N+1];
+int R[N+1];
+int C[N+1];
+int dl; //대각선 왼오
+int dr; //대각선 오왼
+int bingo_cnt;
+
+void init(){
+    for (int i = 1; i <= 5 ; i++) {
+        for (int j = 1; j <= 5; j++) {
+            int tmp;
+            scanf("%d", &tmp);
+            arr[tmp] = (node){i,j};
+        }
+    }
+}
+
+void check(int i,int j){
+    if(++R[i]==5){
+        bingo_cnt++;
+    }
+    if(++C[j]==5){
+        bingo_cnt++;
+    }
+    if(i==j && ++dl==5){
+        bingo_cnt++;
+    }
+    if(i+j==6 && ++dr==5){
+        bingo_cnt++;
+    }
+}
+
+void bingo(){
+    int index=1;
+    for(;index<=25;index++){
+        int n;
+        scanf("%d",&n);
+        check(arr[n].r,arr[n].c);
+        if(bingo_cnt>=3){ printf("%d",index); return;}
+    }
+}
+
+int main(void) {
+    init();
+    bingo();
+    return 0;
+}
+
+#endif
+
+
+#if 0
 #include <stdio.h>
 
 typedef struct _node{
