@@ -238,6 +238,100 @@ int main(void) {
 #endif
 
 #if 01
+#include <stdio.h>
+
+int map[30001];
+int visited[3001];
+
+int main(void) {
+    int N, d, k, c;
+    scanf("%d %d %d %d", &N, &d, &k, &c);
+
+    for (int i = 0; i < N; i++) {
+        scanf("%d", &map[i]);
+    }
+
+    int count = 1;
+    int cnt = 0;
+
+    // 쿠폰 초밥은 항상 포함
+    visited[c] = 1;
+
+    // 최초 윈도우 생성
+    for (int i = 0; i < k; i++) {
+        int sushi = map[i];
+
+        if (visited[sushi] == 0)
+            count++;
+
+        visited[sushi]++;
+    }
+
+    cnt = count;
+
+    // 슬라이딩 윈도우
+    for (int i = 0; i < N - 1; i++) {
+
+        // 1. 맨 앞 초밥 제거
+        int remove = map[i];
+        visited[remove]--;
+
+        if (visited[remove] == 0)
+            count--;
+
+        // 2. 새로운 초밥 추가
+        int add = map[(i + k) % N];
+
+        if (visited[add] == 0)
+            count++;
+
+        visited[add]++;
+
+        // 3. 최댓값 갱신
+        if (count > cnt)
+            cnt = count;
+    }
+
+    printf("%d\n", cnt);
+
+    return 0;
+}
+
+#endif
+
+#if 0
+
+#include <stdio.h>
+
+int cnt;
+
+
+int main(void){
+    int N,d,k,c;
+    scanf("%d %d %d %d",&N,&d,&k,&c);
+    int map[30001];
+    for(int i=0;i<N;i++){
+        scanf("%d",&map[i]);
+    }
+    for(int i=0;i<N;i++){
+        int visited[3001] = {0};
+        visited[c]=1;
+        int count=1;
+        for(int j=0;j<k;j++){
+            int m =(i+j)%N;
+            if(visited[map[m]]) continue;
+            
+            visited[map[m]]++;
+            count++;
+        }
+        if(count>cnt) cnt=count;
+    }
+    printf("%d",cnt);
+}
+
+#endif
+
+#if 0
 
 typedef struct _stack{
     int front,rear;
@@ -264,9 +358,6 @@ int solution(char* c){
     }
     return pice;
 }
-
-
-
 
 
 int main(void){
