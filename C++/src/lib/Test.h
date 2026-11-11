@@ -5,7 +5,5 @@ class Test{
 public:
     int a;
     int b;
-    void printData(){
-        cout << a << "," <<b << endl;
-    }
+    void printData();
 };

@@ -1,7 +1,7 @@
 #include "lib/Test.h"
 
 
-
+#if 0
 int main(){
     Test t1;
     t1.a = 10;
@@ -13,3 +13,26 @@ int main(){
     t2->b = 200;
     t2->printData();
 }
+#endif
+
+//과제
+#if 01
+#include "lib/Person.h"
+
+int main()
+{
+    PersonService service;
+    service.add();
+    service.add();
+    service.add();
+    service.get();
+    service.printAll();
+    service.edit();
+    service.printAll();
+    service.del();
+    service.del();
+    service.printAll();
+}
+
+
+#endif
