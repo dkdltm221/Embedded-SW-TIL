@@ -176,7 +176,7 @@ int main()
 
 #endif
 
-#if 01
+#if 0
 
 //성적처리 프로그램
 //학생 3 ,학생:번호,이름,국,영,수, 총점
@@ -235,4 +235,97 @@ int main() {
 }
 
 
+#endif
+
+#if 0
+
+#pragma once
+class StaticTest
+{
+public:
+	int x;
+	static int y;
+
+	void f1();
+	static void f2();
+	void f3();
+	static void f4();
+};
+
+
+int StaticTest::y = 0;  //static 멤버는 객체 생성 전에도 사용 가능
+
+//일반 함수. 일반 멤버 변수, static 멤버 변수 모두 사용 가능
+void StaticTest::f1() 
+{
+	x = 1;
+	y = 2;
+}
+
+//static 함수는 static 멤버 변수만 사용 가능
+//static 함수도 객체 생성 전에 호출가능. 일반 멤버는 존재하지 않음=> 사용불가
+void StaticTest::f2()
+{
+	//x = 1;	//error
+	y = 2;
+}
+
+//일반 멤버 함수는 일반 멤버 함수와 static 멤버 함수 모두 호출 가능
+void StaticTest::f3()
+{
+	f1(); //일반 멤버 함수 호출 가능
+	f2(); //static 멤버 함수 호출 가능
+}
+
+//static 함수는 일반 멤버 함수 호출 못함. static 멤버 함수 모두 호출 가능
+void StaticTest::f4()
+{
+	//f1();	//error. 객체 새성전 일반 멤버 함수 호출 불가
+	f2();   //static 함수만 호출 가능
+}
+
+
+int main()
+{
+    StaticTest::f2();
+    StaticTest::f4();
+
+    StaticTest st;
+    st.f1();
+    st.f2();
+    st.f3();
+    st.f4();
+}
+
+#endif
+
+#if 01
+
+class Product{
+    private:
+        int num;
+        string name;
+        int price;
+        static int cnt;
+    public:
+        Product():num(cnt++),name(""),price(0){}
+        Product(const string& name,int price){
+            this ->num = cnt++;
+            this->name = name;
+            this -> price = price;
+            
+        }
+        void printInfo() const{
+            cout << "num: " << num << " name: " << name <<" price: "<< price <<endl; 
+        }
+};
+
+int Product::cnt = 0;
+
+int main(void){
+    Product a[3] = {Product{"asdf",3},{"Asdf",2},{"asdf",1}};
+    a[0].printInfo();
+    a[1].printInfo();
+    a[2].printInfo();
+}
 #endif

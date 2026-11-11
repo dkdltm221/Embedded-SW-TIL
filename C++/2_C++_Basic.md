@@ -1,4 +1,4 @@
-﻿# C++ 객체지향 — Point 실습
+﻿# C++ 객체지향 — 생성·복사·static·상속
 
 > 2026-11-11 · Day 02 · [실습 코드](src/2_C++.cpp)
 
@@ -208,4 +208,124 @@ void printPerson(Person p);
 void printPerson(Person& p);
 ```
 
-위 두 함수를 함께 선언하면 **일반 객체로 printPerson(p1)을 호출할 때 어느 쪽을 선택할지 모호해서 컴파일 오류**가 난다. 현재 main에서는 호출하지 않아서 드러나지 않는다. 비교 실습은 함수 이름을 나누거나 하나씩 활성화해서 진행한다.
+위 두 함수를 함께 선언하면 **일반 객체로 printPerson(p1)을 호출할 때 어느 쪽을 선택할지 모호해서 컴파일 오류**가 난다. 현재 실습 코드에서는 참조 버전을 printPerson2로 분리해 이 문제를 피했다. 비교 실습은 함수 이름을 나누거나 하나씩 활성화해서 진행한다.
+
+## 9. 성적처리: Student가 Score를 포함
+
+```cpp
+class Student {
+    int num;
+    string name;
+    Score scor;
+public:
+    Student(const Score& s, int num, string name)
+        : num(num), name(name), scor(s) {}
+};
+```
+
+- Student는 Score를 **가지고 있다(has-a)**. Student가 Score의 한 종류인 것은 아니므로 상속 관계가 아니다.
+- s는 참조로 받지만 멤버 scor는 별도 객체로 복사해서 저장한다.
+- 생성자에서 국·영·수와 총점을 초기화하고, 출력 함수는 const로 둔다.
+- `Score scor`는 Student와 함께 자동 소멸한다. string도 내부 자원을 정리하므로 직접 delete할 것이 없다.
+- `Score*`에 new로 만든 객체를 저장하면 소유자가 해제해야 한다. 현재처럼 점수 객체 하나가 항상 함께 존재하면 값 멤버가 단순하다.
+
+## 10. static: 공유 카운터와 객체별 번호
+
+현재 Product 코드의 핵심:
+
+```cpp
+class Product {
+    int num;          // 객체마다 자기 번호 보관
+    string name;
+    int price;
+    static int cnt;   // 모든 객체가 공유하는 카운터
+public:
+    Product() : num(cnt++), name(""), price(0) {}
+    Product(const string& name, int price)
+        : num(cnt++), name(name), price(price) {}
+
+    void printInfo() const {
+        cout << num << ", " << name << ", " << price << endl;
+    }
+};
+
+int Product::cnt = 0;  // 클래스 밖에서 한 번 정의·초기화
+```
+
+- cnt의 **선언은 클래스 안**, 정의와 초기화는 클래스 밖이다. 밖에 적어도 Product 소속이며 private 접근 제한도 유지된다.
+- 생성자에서는 cnt를 초기화하지 않고 증가시킨다. 매번 0을 대입하면 카운터가 리셋된다.
+- cnt++로 생성한 세 객체의 num은 0, 1, 2이고, 공유 cnt는 3이다.
+- num까지 static으로 바꾸면 각자의 번호를 보관하지 못하고 모두 같은 값을 보게 된다.
+- 이 cnt는 누적 번호 발급용이다. 객체가 소멸해도 줄이지 않으므로 현재 살아 있는 객체 수와는 다르다.
+- 기본 복사 생성자는 num도 그대로 복사한다. 복사 생성에도 새 번호를 주려면 별도로 설계해야 한다.
+- C++17부터는 `inline static int cnt = 0;`으로 클래스 안에서 정의할 수도 있다. 이 경우 밖의 정의는 제거한다.
+
+### static 멤버 함수
+
+`StaticTest::f2()`처럼 객체 없이 호출할 수 있고 this가 없다. 따라서 일반 멤버 x나 f1을 **객체 지정 없이** 사용할 수 없다. 단, 전달받거나 직접 만든 객체를 통해 일반 멤버에 접근하는 것은 가능하다.
+
+### 오늘 적용한 const
+
+- `printInfo() const`: 현재 객체를 읽기만 하는 함수.
+- `const string& name`: 원본 문자열을 수정하지 않고 참조로 받기. 멤버 name에 저장할 때는 복사한다.
+- cnt는 증가해야 하므로 const로 만들 수 없다.
+
+## 11. 상속: 부모의 한 종류를 만들기
+
+```cpp
+class Child : public Parent {
+    int ch1;
+public:
+    Child(int x, int y, int z, int ch1)
+        : Parent(x, y, z), ch1(ch1) {}
+};
+```
+
+- public 상속은 **Child가 Parent의 한 종류(is-a)**라는 관계를 표현한다. 예: SmartPhone은 Phone의 한 종류.
+- `Parent(x, y, z)`는 객체 안의 부모 부분을 초기화한다. ch1은 자식의 멤버다.
+- 부모 생성자를 명시하지 않으면 부모의 기본 생성자를 호출하려 한다. 기본 생성자가 없다면 사용할 부모 생성자에 인자를 전달해야 한다.
+- 부모의 private 데이터도 부모 부분에 존재한다. 자식이 직접 접근할 수 없을 뿐이며, 부모의 공개 함수로 사용할 수 있다.
+
+### 자료의 Parent / Child1·2·3 코드 읽기
+
+Parent에는 private x, protected y, public z와 print가 있다. 세 자식 생성자 모두 자기 객체의 y, z에 접근 가능하지만 x에는 직접 접근할 수 없다.
+
+| 상속 방식 | 부모 public 멤버 | 부모 protected 멤버 | 부모 private 멤버 직접 접근 |
+| --- | --- | --- | --- |
+| public | public | protected | 불가 |
+| protected | protected | protected | 불가 |
+| private | private | private | 불가 |
+
+- Child1 객체는 main에서 print(), z를 사용할 수 있다.
+- Child2와 Child3 객체는 main에서 부모의 print(), z를 직접 사용할 수 없다.
+- **private 상속이 부모의 private 데이터에 접근 권한을 주는 것은 아니다.** 위 표는 접근 가능한 부모 public/protected 멤버의 취급을 나타낸다.
+- protected로 데이터를 공개할지는 설계 선택이다. private을 유지하고 필요한 함수를 제공할 수도 있다.
+
+### 생성·소멸 순서
+
+```text
+Child1 생성: Parent 생성자 → Child1 생성자
+Child1 소멸: Child1 소멸자 → Parent 소멸자
+
+지역 객체를 c1, c2, c3 순서로 생성했다면:
+c3(자식 → 부모) → c2(자식 → 부모) → c1(자식 → 부모) 순서로 소멸
+```
+
+자료의 실행 결과에는 `cout << c1.z`의 출력인 3이 빠져 있다.
+
+Phone 예제에서는 SmartPhone이 Phone(num)으로 전화번호를 초기화하고, 물려받은 call()과 자기 기능 webBrowsing()을 사용한다. 자식에서 전화번호를 직접 만져야 할 때만 protected 접근이 필요하다.
+
+## 오늘 핵심만 복습
+
+| 질문 | 기억할 답 |
+| --- | --- |
+| 왜 this.x가 아니라 this->x? | this는 포인터이기 때문 |
+| private인데 p.x를 왜 읽지? | 같은 클래스의 멤버 함수는 다른 동일 클래스 객체의 private에도 접근 가능 |
+| return x는 복사인데 왜 const? | 반환값 복사와 함수 안에서 원본을 수정하지 않는 약속은 별개 |
+| 복사 생성에 =를 쓰면 얕은 복사? | 아님. 작성된 복사 생성자가 복사 방식을 결정 |
+| 참조로 반환하면 항상 복사 안 하나? | 받는 쪽도 참조로 받아야 원본의 별명으로 유지 |
+| new 없이 포함한 Score도 delete? | 필요 없음. Student와 함께 자동 소멸 |
+| cnt와 num이 왜 둘 다 필요? | 번호 발급용 공유 상태와 객체별 번호 저장은 다른 역할 |
+| 포함과 상속의 차이? | Student has-a Score / SmartPhone is-a Phone |
+| 상속 시 생성·소멸 순서? | 생성은 부모부터, 소멸은 자식부터 |
+
