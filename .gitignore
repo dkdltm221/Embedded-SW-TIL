@@ -5,3 +5,6 @@
 *.ilk
 *.vsix
 /debug.log
+.vs/
+[Bb]in/
+[Oo]bj/
