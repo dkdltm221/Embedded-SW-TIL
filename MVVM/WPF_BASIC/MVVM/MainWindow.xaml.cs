@@ -19,18 +19,9 @@ namespace MVVM
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainViewModel();
         }
 
-        private void myButton_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("버튼 클릭");
-            string txt =(string)((Button)sender).Content;
-            MessageBox.Show(txt);
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            tb.Text = "new Text";
-        }
+       
     }
 }
