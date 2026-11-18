@@ -127,6 +127,7 @@ book.OnContactAdded += (c) => Console.WriteLine("추가됨");
 
 
  **/
+ /*
  public class Player
 {
     // 이벤트 선언 (델리게이트 타입을 이벤트로 포장)
@@ -156,3 +157,69 @@ class Program
         player.Hit(0); // 여기서 OnDie 이벤트 발생
     }
 }
+*/
+/*
+public class Player
+{
+    // 이벤트 선언 (델리게이트 타입을 이벤트로 포장)
+    public event Action OnDie;
+
+    public void Hit(int damage)
+    {
+        Console.WriteLine($"공격받음! 현재 체력: {damage}");
+        if (damage <= 0)
+        {
+            // 이벤트 발생 (구독자들에게 통보)
+            OnDie?.Invoke();
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Player player = new Player();
+
+        // 이벤트 구독 (구독자가 스스로 알아서 연결)
+        player.OnDie += () => Console.WriteLine("캐릭터 사망! 게임 오버!");
+
+        player.Hit(10);
+        player.Hit(0); // 여기서 OnDie 이벤트 발생
+    }
+}
+public class Order
+{
+    public event EventHandler<OrderEventArgs> OrderCompleted;
+
+    public void CompleteOrder()
+    {
+        OrderEventArgs args = new OrderEventArgs
+        {
+            OrderId = 1001,
+            Price = 50000
+        };
+
+        OrderCompleted?.Invoke(this, args);
+    }
+}
+class Program
+{
+    static void Main()
+    {
+        Order order = new Order();
+        
+				//EventHandler 델리게이트에 구현한 이벤트 핸들러 함수 등록
+        order.OrderCompleted += OnOrderCompleted; 
+
+        order.CompleteOrder(); //이벤트 발생
+    }
+
+    //이벤트 핸들러로 사용할 함수 정의
+    static void OnOrderCompleted(object sender, OrderEventArgs e)
+    {
+        Console.WriteLine($"주문번호: {e.OrderId}");
+        Console.WriteLine($"주문금액: {e.Price}");
+    }
+}
+*/
